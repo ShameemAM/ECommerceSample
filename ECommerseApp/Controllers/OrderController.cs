@@ -17,12 +17,19 @@ namespace ECommerseApp.Controllers
         [HttpPost]
         public IActionResult GetLatestOrderByCustomer([FromBody]OrderByCustomerRequestModel customerModel)
         {
-           var orderDetails = _orderService.GetLatestOrderByCustomer(customerModel);
-            if (orderDetails.Customer == null)
+            try
             {
-                return BadRequest("Customer not found");
+                var orderDetails = _orderService.GetLatestOrderByCustomer(customerModel);
+                if (orderDetails.Customer == null)
+                {
+                    return BadRequest("Customer not found");
+                }
+                return Ok(orderDetails);
             }
-            return Ok(orderDetails);
+            catch (Exception)
+            {
+                return NotFound("Something went wrong");
+            }
         }
     }
 }
